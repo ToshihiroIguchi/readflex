@@ -1,0 +1,22 @@
+Package: readflex
+Type: Package
+Title: Flexible CSV reader with auto-detected encoding
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Toshihiro", "Iguchi",
+      email = "toshihiro.iguchi.github@gmail.com",
+      role = c("aut", "cre")
+    )
+  )
+Description: `readflex()` attempts to read a CSV file by automatically detecting its character encoding
+    (using `readr::guess_encoding()` or `stringi::stri_enc_detect()`) and falls back to
+    a user-specified list of common encodings if detection fails.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports:
+  readr,
+  stringi,
+  utils
+RoxygenNote: 7.3.2
