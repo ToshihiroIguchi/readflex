@@ -28,14 +28,12 @@ readflex <- function(file,
                        "UTF-8", "UTF-8-BOM", "UTF-16LE", "UTF-16BE",
                        "Shift_JIS", "CP932", "EUC-JP", "ISO-2022-JP",
                        "ISO-8859-1", "Windows-1252", "latin1",
-                       # Chinese encodings
-                       "GB18030", "GB2312", "GBK",       # Simplified Chinese
-                       "Big5", "Big5-HKSCS",             # Traditional Chinese
-                       # Korean encodings
+                       "GB18030", "GB2312", "GBK", "Big5", "Big5-HKSCS",
                        "EUC-KR", "ISO-2022-KR"
                      ),
                      guess_n_max = 1000,
-                     verbose = FALSE) {
+                     verbose = FALSE,
+                     stringsAsFactors = FALSE) { # 引数追加
   stopifnot(is.character(file), length(file) == 1)
   stopifnot(is.numeric(guess_n_max), guess_n_max > 0)
   stopifnot(is.logical(verbose), length(verbose) == 1)
@@ -44,11 +42,17 @@ readflex <- function(file,
   try_read <- function(enc) {
     if (verbose) message(sprintf("[readflex] Trying encoding: %s", enc))
     tryCatch(
-      utils::read.csv(file, fileEncoding = enc, ..., stringsAsFactors = FALSE),
+      utils::read.csv(
+        file,
+        fileEncoding = enc,
+        ...,
+        stringsAsFactors = stringsAsFactors # ここで反映
+      ),
       error   = function(e) e,
       warning = function(w) w
     )
   }
+
 
   # 1) Auto-detect encodings
   detected <- character(0)
