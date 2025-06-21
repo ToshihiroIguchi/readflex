@@ -28,10 +28,10 @@ readflex_shiny_ui <- function(id, max_file_size = 100) {
       shiny::conditionalPanel(
         condition = sprintf("input['%s'] != null", ns("file")),
         shiny::wellPanel(
-          shiny::h4("📋 File Analysis"),
+          shiny::h4("[ANALYSIS] File Analysis"),
           shiny::verbatimTextOutput(ns("file_info")),
           
-          shiny::h4("⚙️ Options"),
+          shiny::h4(" Options"),
           shiny::fluidRow(
             shiny::column(6,
               shiny::selectInput(
@@ -47,12 +47,12 @@ readflex_shiny_ui <- function(id, max_file_size = 100) {
             )
           ),
           
-          shiny::actionButton(ns("process"), "📊 Process File", class = "btn-primary"),
+          shiny::actionButton(ns("process"), "[PROCESS] Analyze File", class = "btn-primary"),
           
           shiny::conditionalPanel(
             condition = sprintf("input['%s'] > 0", ns("process")),
             shiny::br(),
-            shiny::downloadButton(ns("download"), "💾 Download Data", class = "btn-success")
+            shiny::downloadButton(ns("download"), " Download Data", class = "btn-success")
           )
         )
       )
@@ -63,10 +63,10 @@ readflex_shiny_ui <- function(id, max_file_size = 100) {
       condition = sprintf("input['%s'] > 0", ns("process")),
       
       shiny::wellPanel(
-        shiny::h4("📊 Processing Results"),
+        shiny::h4("[RESULTS] Processing Results"),
         shiny::verbatimTextOutput(ns("encoding_info")),
         
-        shiny::h4("📋 Data Preview"),
+        shiny::h4("[PREVIEW] Data Preview"),
         DT::dataTableOutput(ns("data_preview"))
       )
     )
@@ -96,7 +96,7 @@ readflex_shiny_server <- function(id, max_file_size = 100) {
       file_info <- file.info(file_path)
       
       sprintf(
-        "📁 File: %s\n📏 Size: %.2f MB\n📅 Modified: %s",
+        "File: %s\nSize: %.2f MB\nModified: %s",
         input$file$name,
         file_info$size / (1024^2),
         file_info$mtime
@@ -144,7 +144,7 @@ readflex_shiny_server <- function(id, max_file_size = 100) {
         progress$set(value = 1, detail = "Complete!")
         
       }, error = function(e) {
-        values$processing_log <- sprintf("❌ Error: %s", e$message)
+        values$processing_log <- sprintf("[ERROR] %s", e$message)
         values$data <- NULL
         values$encoding_result <- NULL
       })
@@ -154,7 +154,7 @@ readflex_shiny_server <- function(id, max_file_size = 100) {
     output$encoding_info <- shiny::renderText({
       if (!is.null(values$data)) {
         sprintf(
-          "✅ Success!\n📊 Rows: %d, Columns: %d\n🔤 Encoding: %s\n\n📝 Processing Log:\n%s",
+          "[SUCCESS] Processing completed\nRows: %d, Columns: %d\nCharacter encoding: %s\n\nProcessing log:\n%s",
           nrow(values$data),
           ncol(values$data),
           if (!is.null(values$encoding_result)) values$encoding_result else "Unknown",
@@ -395,22 +395,22 @@ calculate_quality_score <- function(validation_results) {
 #' @param x readflex_validation object
 #' @param ... Additional arguments
 print.readflex_validation <- function(x, ...) {
-  cat("📋 READFLEX DATA VALIDATION REPORT\n")
+  cat("READFLEX DATA VALIDATION REPORT\n")
   cat(rep("=", 50), "\n")
   
   # Overall status
-  status_icon <- if (x$valid) "✅" else "❌"
-  cat(sprintf("%s Overall Status: %s\n", status_icon, if (x$valid) "VALID" else "INVALID"))
+  status_text <- if (x$valid) "[VALID]" else "[INVALID]"
+  cat(sprintf("%s Overall Status: %s\n", status_text, if (x$valid) "VALID" else "INVALID"))
   
   # Summary
-  cat(sprintf("📊 Data Summary: %d rows, %d columns\n", 
+  cat(sprintf("Data summary: %d rows, %d columns\n", 
               x$summary$total_rows, x$summary$total_columns))
-  cat(sprintf("🎯 Quality Score: %.1f%%\n", x$summary$quality_score * 100))
-  cat(sprintf("📈 Completeness: %.1f%%\n", x$summary$completeness_score * 100))
+  cat(sprintf(" Quality Score: %.1f%%\n", x$summary$quality_score * 100))
+  cat(sprintf("Data completeness: %.1f%%\n", x$summary$completeness_score * 100))
   
   # Errors
   if (length(x$errors) > 0) {
-    cat(sprintf("\n❌ Errors (%d):\n", length(x$errors)))
+    cat(sprintf("\n[ERROR] Validation errors (%d):\n", length(x$errors)))
     for (i in seq_along(x$errors)) {
       cat(sprintf("  %d. %s\n", i, x$errors[i]))
     }
@@ -418,7 +418,7 @@ print.readflex_validation <- function(x, ...) {
   
   # Warnings
   if (length(x$warnings) > 0) {
-    cat(sprintf("\n⚠️ Warnings (%d):\n", length(x$warnings)))
+    cat(sprintf("\n[WARNING] Validation warnings (%d):\n", length(x$warnings)))
     for (i in seq_along(x$warnings)) {
       cat(sprintf("  %d. %s\n", i, x$warnings[i]))
     }
@@ -426,7 +426,7 @@ print.readflex_validation <- function(x, ...) {
   
   # Data quality details
   if (x$data_quality$duplicate_rows > 0) {
-    cat(sprintf("\n🔄 Duplicates: %d rows (%.1f%%)\n", 
+    cat(sprintf("\n Duplicates: %d rows (%.1f%%)\n", 
                 x$data_quality$duplicate_rows, 
                 x$data_quality$duplicate_ratio * 100))
   }
@@ -442,14 +442,15 @@ print.readflex_validation <- function(x, ...) {
 create_readflex_app <- function(title = "Readflex File Processor", theme = "flatly") {
   
   ui <- shiny::fluidPage(
-    
-    if (requireNamespace("shinythemes", quietly = TRUE)) {
-      shinythemes::theme = shinythemes::shinytheme(theme)
+    theme = if (requireNamespace("shinythemes", quietly = TRUE)) {
+      shinythemes::shinytheme(theme)
+    } else {
+      NULL
     },
     
     shiny::titlePanel(
       shiny::div(
-        shiny::h1("📊 Readflex File Processor"),
+        shiny::h1("Readflex File Processor"),
         shiny::p("Universal CSV and text file reader with automatic encoding detection")
       )
     ),
@@ -458,7 +459,7 @@ create_readflex_app <- function(title = "Readflex File Processor", theme = "flat
       shiny::sidebarPanel(
         width = 4,
         
-        shiny::h3("🔧 Configuration"),
+        shiny::h3(" Configuration"),
         
         shiny::selectInput(
           "global_profile",
@@ -472,11 +473,11 @@ create_readflex_app <- function(title = "Readflex File Processor", theme = "flat
         
         shiny::hr(),
         
-        shiny::h4("📈 System Status"),
+        shiny::h4("[STATUS] System Status"),
         shiny::verbatimTextOutput("system_status"),
         
         shiny::br(),
-        shiny::actionButton("clear_cache", "🧹 Clear Cache", class = "btn-warning")
+        shiny::actionButton("clear_cache", " Clear Cache", class = "btn-warning")
       ),
       
       shiny::mainPanel(
@@ -489,15 +490,15 @@ create_readflex_app <- function(title = "Readflex File Processor", theme = "flat
     
     shiny::fluidRow(
       shiny::column(12,
-        shiny::h4("ℹ️ About Readflex"),
+        shiny::h4(" About Readflex"),
         shiny::p("Readflex is an advanced file reading package that automatically detects character encodings and handles various file formats. It supports:"),
         shiny::tags$ul(
-          shiny::tags$li("📝 Multiple text formats: CSV, TSV, PSV, fixed-width"),
-          shiny::tags$li("📊 Office formats: Excel (.xlsx, .xls), OpenDocument (.ods)"),
-          shiny::tags$li("🗜️ Compressed files: .gz, .bz2, .xz, .zip"),
-          shiny::tags$li("🌍 International encodings: UTF-8, Shift_JIS, GB18030, Big5, EUC-KR, KOI8-R, and more"),
-          shiny::tags$li("🔍 Automatic encoding detection with fallback mechanisms"),
-          shiny::tags$li("⚡ Performance optimization with caching and parallel processing")
+          shiny::tags$li(" Multiple text formats: CSV, TSV, PSV, fixed-width"),
+          shiny::tags$li("Office formats: Excel (.xlsx, .xls), OpenDocument (.ods)"),
+          shiny::tags$li(" Compressed files: .gz, .bz2, .xz, .zip"),
+          shiny::tags$li(" International encodings: UTF-8, Shift_JIS, GB18030, Big5, EUC-KR, KOI8-R, and more"),
+          shiny::tags$li("Automatic character encoding detection with fallback mechanisms"),
+          shiny::tags$li(" Performance optimization with caching and parallel processing")
         )
       )
     )
@@ -525,7 +526,7 @@ create_readflex_app <- function(title = "Readflex File Processor", theme = "flat
       cache_info <- capture.output(manage_readflex_cache("info"))
       
       sprintf(
-        "💾 Cache: %s\n📈 Stats: %s\n🔄 Parallel: %s\n🌐 Encodings: %d",
+        "Cache: %s\nStatistics: %s\nParallel processing: %s\nSupported encodings: %d",
         if (config$cache_enabled) "Enabled" else "Disabled",
         if (config$stats_enabled) "Enabled" else "Disabled",
         if (config$parallel_enabled) "Enabled" else "Disabled",

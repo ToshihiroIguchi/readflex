@@ -1,25 +1,16 @@
 Package: readflex
 Type: Package
-Title: Enhanced Flexible CSV Reader with Automatic Encoding Detection
+Title: Flexible CSV Reader with Automatic Encoding Detection
 Version: 1.0.0
 Date: 2025-06-21
-Authors@R: c(
-    person(
-      "Toshihiro", "Iguchi",
-      email = "toshihiro.iguchi.github@gmail.com",
-      role = c("aut", "cre")
-    )
-  )
+Author: Toshihiro Iguchi <toshihiro.iguchi.github@gmail.com>
 Maintainer: Toshihiro Iguchi <toshihiro.iguchi.github@gmail.com>
-Description: An advanced CSV reader that automatically detects character encodings
-    and handles various file formats. Features include multi-language support,
-    performance optimization with caching and parallel processing, comprehensive
-    diagnostics, data validation, Shiny integration, and extensive analytics.
-    Supports UTF-8, Shift_JIS, GB18030, Big5, EUC-KR, KOI8-R, Windows-1251,
-    ISO-8859-1, and many other encodings commonly used worldwide.
+Description: Automatically detects character encodings and reads CSV files 
+    with various text encodings commonly used worldwide. Supports UTF-8, 
+    Shift_JIS, GB18030, Big5, EUC-KR, KOI8-R, Windows-1251, ISO-8859-1 
+    and other encodings. Provides diagnostic tools, caching for performance,
+    and handles multiple file formats including compressed files.
 License: MIT + file LICENSE
-URL: https://github.com/toshihiro-iguchi/readflex
-BugReports: https://github.com/toshihiro-iguchi/readflex/issues
 Encoding: UTF-8
 LazyData: true
 Depends: 
@@ -30,6 +21,7 @@ Imports:
     stats
 Suggests:
     stringi (>= 1.4.0),
+    stringr,
     readr (>= 2.0.0),
     parallel,
     digest,
@@ -46,6 +38,7 @@ Suggests:
     tinytest
 RoxygenNote: 7.3.2
 Collate:
+    'constants.R'
     'performance.R'
     'diagnostics.R'
     'config.R'
@@ -54,3 +47,4 @@ Collate:
     'analytics.R'
     'readflex_enhanced.R'
     'readflex.R'
+    'readflex-package.R'

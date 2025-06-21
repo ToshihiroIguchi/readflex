@@ -70,10 +70,16 @@ detect_file_format <- function(file) {
     }, error = function(e) character(0))
     
     if (length(sample_lines) > 0) {
-      # Count separators
-      comma_count <- mean(stringr::str_count(sample_lines, ","))
-      tab_count <- mean(stringr::str_count(sample_lines, "\t"))
-      pipe_count <- mean(stringr::str_count(sample_lines, "\\|"))
+      # Count separators with base R fallback
+      if (requireNamespace("stringr", quietly = TRUE)) {
+        comma_count <- mean(stringr::str_count(sample_lines, ","))
+        tab_count <- mean(stringr::str_count(sample_lines, "\t"))
+        pipe_count <- mean(stringr::str_count(sample_lines, "\\|"))
+      } else {
+        comma_count <- mean(lengths(regmatches(sample_lines, gregexpr(",", sample_lines, fixed = TRUE))))
+        tab_count <- mean(lengths(regmatches(sample_lines, gregexpr("\t", sample_lines, fixed = TRUE))))
+        pipe_count <- mean(lengths(regmatches(sample_lines, gregexpr("\\|", sample_lines))))
+      }
       
       if (tab_count > comma_count && tab_count > pipe_count) {
         return("tsv")
@@ -281,9 +287,14 @@ is_fixed_width_file <- function(file) {
   line_lengths <- nchar(sample_lines)
   length_variance <- var(line_lengths)
   
-  # Check if separators are rare
-  comma_count <- mean(stringr::str_count(sample_lines, ","))
-  tab_count <- mean(stringr::str_count(sample_lines, "\t"))
+  # Check if separators are rare with base R fallback
+  if (requireNamespace("stringr", quietly = TRUE)) {
+    comma_count <- mean(stringr::str_count(sample_lines, ","))
+    tab_count <- mean(stringr::str_count(sample_lines, "\t"))
+  } else {
+    comma_count <- mean(lengths(regmatches(sample_lines, gregexpr(",", sample_lines, fixed = TRUE))))
+    tab_count <- mean(lengths(regmatches(sample_lines, gregexpr("\t", sample_lines, fixed = TRUE))))
+  }
   
   # Fixed-width heuristic
   return(length_variance < 5 && comma_count < 1 && tab_count < 1)
@@ -372,7 +383,7 @@ read_fixed_width_base <- function(file, widths, col_names = NULL, ...) {
   
   # Try to convert numeric columns
   for (i in seq_along(result)) {
-    if (all(grepl("^[0-9.-]+$", result[[i]], na.rm = TRUE))) {
+    if (all(grepl("^[0-9.-]+$", result[[i]]))) {
       numeric_version <- suppressWarnings(as.numeric(result[[i]]))
       if (!all(is.na(numeric_version))) {
         result[[i]] <- numeric_version

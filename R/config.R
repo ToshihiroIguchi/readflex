@@ -317,23 +317,23 @@ print_readflex_config <- function(config = NULL) {
     config <- as.list(.readflex_config)
   }
   
-  cat("⚙️  READFLEX CONFIGURATION\n")
+  cat("READFLEX CONFIGURATION\n")
   cat(rep("=", 40), "\n")
   
-  cat(sprintf("📁 Default encodings: %d encodings\n", length(config$default_encodings)))
+  cat(sprintf(" Default encodings: %d encodings\n", length(config$default_encodings)))
   cat("   ", paste(head(config$default_encodings, 6), collapse = ", "))
   if (length(config$default_encodings) > 6) {
     cat(sprintf(", ... (%d more)", length(config$default_encodings) - 6))
   }
   cat("\n")
   
-  cat(sprintf("💾 Cache enabled: %s\n", if (config$cache_enabled) "Yes" else "No"))
-  cat(sprintf("⏰ Cache TTL: %d hours\n", config$cache_ttl_hours))
-  cat(sprintf("🔄 Parallel processing: %s\n", if (config$parallel_enabled) "Enabled" else "Disabled"))
-  cat(sprintf("📊 Statistics collection: %s\n", if (config$stats_enabled) "Enabled" else "Disabled"))
-  cat(sprintf("🔊 Verbose level: %d\n", config$verbose_level))
-  cat(sprintf("📏 Max file size: %d MB\n", config$max_file_size_mb))
-  cat(sprintf("🔍 Encoding detection lines: %d\n", config$guess_n_max))
+  cat(sprintf(" Cache enabled: %s\n", if (config$cache_enabled) "Yes" else "No"))
+  cat(sprintf(" Cache TTL: %d hours\n", config$cache_ttl_hours))
+  cat(sprintf(" Parallel processing: %s\n", if (config$parallel_enabled) "Enabled" else "Disabled"))
+  cat(sprintf(" Statistics collection: %s\n", if (config$stats_enabled) "Enabled" else "Disabled"))
+  cat(sprintf(" Verbose level: %d\n", config$verbose_level))
+  cat(sprintf(" Max file size: %d MB\n", config$max_file_size_mb))
+  cat(sprintf(" Encoding detection lines: %d\n", config$guess_n_max))
   
   cat(rep("=", 40), "\n")
 }
@@ -363,17 +363,17 @@ show_readflex_profiles <- function() {
     ))
   }
   
-  cat("🌍 AVAILABLE READFLEX PROFILES\n")
+  cat(" AVAILABLE READFLEX PROFILES\n")
   cat(rep("=", 60), "\n")
   
   for (i in 1:nrow(profiles_info)) {
-    cat(sprintf("📍 %s (%s)\n", profiles_info$Name[i], profiles_info$Region[i]))
+    cat(sprintf(" %s (%s)\n", profiles_info$Name[i], profiles_info$Region[i]))
     cat(sprintf("   Encodings: %s\n", profiles_info$Primary_Encodings[i]))
     cat(sprintf("   %s\n\n", profiles_info$Description[i]))
   }
   
-  cat("💡 Usage: readflex_profile('region_name', apply_immediately = TRUE)\n")
-  cat("🔧 Auto-detect: readflex_profile('auto', apply_immediately = TRUE)\n")
+  cat(" Usage: readflex_profile('region_name', apply_immediately = TRUE)\n")
+  cat(" Auto-detect: readflex_profile('auto', apply_immediately = TRUE)\n")
   
   invisible(profiles_info)
 }
@@ -388,12 +388,12 @@ manage_readflex_cache <- function(action = "info") {
       cache_size <- length(ls(.encoding_cache))
       stats_size <- length(ls(.performance_stats))
       
-      cat("💾 READFLEX CACHE STATUS\n")
+      cat(" READFLEX CACHE STATUS\n")
       cat(rep("=", 30), "\n")
-      cat(sprintf("📊 Cached encodings: %d entries\n", cache_size))
-      cat(sprintf("📈 Performance stats: %d entries\n", stats_size))
-      cat(sprintf("⚙️  Cache enabled: %s\n", if (get_readflex_config("cache_enabled")) "Yes" else "No"))
-      cat(sprintf("⏰ Cache TTL: %d hours\n", get_readflex_config("cache_ttl_hours")))
+      cat(sprintf(" Cached encodings: %d entries\n", cache_size))
+      cat(sprintf(" Performance stats: %d entries\n", stats_size))
+      cat(sprintf("  Cache enabled: %s\n", if (get_readflex_config("cache_enabled")) "Yes" else "No"))
+      cat(sprintf(" Cache TTL: %d hours\n", get_readflex_config("cache_ttl_hours")))
       
       if (cache_size > 0) {
         # Show cache age distribution
@@ -402,14 +402,14 @@ manage_readflex_cache <- function(action = "info") {
           difftime(Sys.time(), entry$timestamp, units = "hours")
         })
         
-        cat(sprintf("🕐 Cache age: %.1f - %.1f hours (avg: %.1f)\n", 
+        cat(sprintf(" Cache age: %.1f - %.1f hours (avg: %.1f)\n", 
                     min(cache_ages), max(cache_ages), mean(cache_ages)))
       }
     },
     
     "clear" = {
       clear_readflex_cache(clear_cache = TRUE, clear_stats = TRUE)
-      cat("🧹 Cache and statistics cleared\n")
+      cat(" Cache and statistics cleared\n")
     },
     
     "optimize" = {
@@ -428,7 +428,7 @@ manage_readflex_cache <- function(action = "info") {
         }
       }
       
-      cat(sprintf("🔧 Cache optimized: %d expired entries removed\n", removed_count))
+      cat(sprintf(" Cache optimized: %d expired entries removed\n", removed_count))
     },
     
     stop(sprintf("Unknown action: %s. Use 'info', 'clear', or 'optimize'", action))

@@ -4,9 +4,19 @@
 #' Performance enhancement features including parallel processing, 
 #' caching, and smart encoding detection for improved file reading speed.
 
-# Global cache environment
+# Global cache environment for package
 .encoding_cache <- new.env(parent = emptyenv())
 .performance_stats <- new.env(parent = emptyenv())
+
+# Initialize on load
+.onLoad <- function(libname, pkgname) {
+  if (!exists(".encoding_cache", envir = asNamespace(pkgname))) {
+    assign(".encoding_cache", new.env(parent = emptyenv()), envir = asNamespace(pkgname))
+  }
+  if (!exists(".performance_stats", envir = asNamespace(pkgname))) {
+    assign(".performance_stats", new.env(parent = emptyenv()), envir = asNamespace(pkgname))
+  }
+}
 
 #' Smart encoding order based on content analysis
 #' 
@@ -17,19 +27,19 @@ smart_encoding_order <- function(file_content_sample, file_size_bytes = 0) {
   base_encodings <- c("UTF-8", "UTF-8-BOM")
   
   # Analyze content for language hints
-  if (grepl("[一-龯]", file_content_sample)) {
+  if (grepl("[\u4E00-\u9FAF]", file_content_sample)) {
     # Chinese characters detected
     return(c(base_encodings, "GB18030", "GBK", "Big5", "GB2312"))
-  } else if (grepl("[가-힣]", file_content_sample)) {
+  } else if (grepl("[\uAC00-\uD7AF]", file_content_sample)) {
     # Korean characters detected
     return(c(base_encodings, "EUC-KR", "ISO-2022-KR"))
-  } else if (grepl("[ひらがなカタカナ一-龯]", file_content_sample)) {
+  } else if (grepl("[\u3040-\u309F\u30A0-\u30FF\u4E00-\u9FAF]", file_content_sample)) {
     # Japanese characters detected
     return(c(base_encodings, "Shift_JIS", "EUC-JP", "ISO-2022-JP"))
-  } else if (grepl("[а-я]", file_content_sample, ignore.case = TRUE)) {
+  } else if (grepl("[\u0400-\u04FF]", file_content_sample)) {
     # Cyrillic characters detected
     return(c(base_encodings, "Windows-1251", "KOI8-R", "ISO-8859-5"))
-  } else if (grepl("[àáâãäåæçèéêëìíîïñòóôõöøùúûüý]", file_content_sample, ignore.case = TRUE)) {
+  } else if (grepl("[\u00C0-\u00FF]", file_content_sample)) {
     # European characters detected
     return(c(base_encodings, "ISO-8859-1", "Windows-1252", "ISO-8859-15"))
   }

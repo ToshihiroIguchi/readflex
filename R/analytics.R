@@ -108,7 +108,7 @@ readflex_stats <- function(detailed = TRUE) {
 #' @param x readflex_stats object
 #' @param ... Additional arguments
 print.readflex_stats <- function(x, ...) {
-  cat("📊 READFLEX USAGE STATISTICS\n")
+  cat("READFLEX USAGE STATISTICS\n")
   cat(rep("=", 50), "\n")
   
   if (!is.null(x$message)) {
@@ -118,23 +118,23 @@ print.readflex_stats <- function(x, ...) {
   
   # Summary
   s <- x$summary
-  cat(sprintf("📈 Total Operations: %d\n", s$total_operations))
-  cat(sprintf("📁 Files Processed: %d\n", s$total_files_processed))
-  cat(sprintf("⏱️  Average Time: %.3f seconds\n", s$average_processing_time))
-  cat(sprintf("📊 Total Data: %.2f MB\n", s$total_data_processed_mb))
-  cat(sprintf("🚀 Fastest: %.3f sec | 🐌 Slowest: %.3f sec\n", 
+  cat(sprintf("Total Operations: %d\n", s$total_operations))
+  cat(sprintf("Files Processed: %d\n", s$total_files_processed))
+  cat(sprintf("Average Time: %.3f seconds\n", s$average_processing_time))
+  cat(sprintf("Total Data: %.2f MB\n", s$total_data_processed_mb))
+  cat(sprintf("Fastest: %.3f sec | Slowest: %.3f sec\n", 
               s$fastest_operation, s$slowest_operation))
   
   # Recent activity
   if (!is.null(x$recent_activity)) {
-    cat(sprintf("🕐 Last 24h: %d operations (avg: %.3f sec)\n", 
+    cat(sprintf("Last 24h: %d operations (avg: %.3f sec)\n", 
                 x$recent_activity$operations_24h, 
                 x$recent_activity$avg_duration_24h))
   }
   
   # Top encodings
   if (!is.null(x$encoding_frequency) && length(x$encoding_frequency) > 0) {
-    cat("\n🔤 Most Used Encodings:\n")
+    cat("\nMost Used Encodings:\n")
     top_encodings <- head(x$encoding_frequency, 5)
     for (i in seq_along(top_encodings)) {
       cat(sprintf("  %d. %s: %d times\n", i, names(top_encodings)[i], top_encodings[[i]]))
@@ -143,7 +143,7 @@ print.readflex_stats <- function(x, ...) {
   
   # File size distribution
   if (!is.null(x$file_size_distribution)) {
-    cat("\n📏 File Size Distribution:\n")
+    cat("\nFile Size Distribution:\n")
     for (i in seq_along(x$file_size_distribution)) {
       cat(sprintf("  %s: %d files\n", 
                   names(x$file_size_distribution)[i], 
@@ -153,9 +153,8 @@ print.readflex_stats <- function(x, ...) {
   
   # Performance trend
   if (!is.null(x$performance_trend)) {
-    trend_icon <- if (x$performance_trend$improving) "📈" else "📉"
     trend_text <- if (x$performance_trend$improving) "improving" else "declining"
-    cat(sprintf("\n%s Performance Trend: %s\n", trend_icon, trend_text))
+    cat(sprintf("\nPerformance Trend: %s\n", trend_text))
   }
   
   cat(rep("=", 50), "\n")
@@ -325,19 +324,19 @@ benchmark_readflex <- function(test_files, iterations = 3, compare_with = NULL, 
 #' @param x readflex_benchmark object
 #' @param ... Additional arguments
 print.readflex_benchmark <- function(x, ...) {
-  cat("🏁 READFLEX BENCHMARK RESULTS\n")
+  cat("READFLEX BENCHMARK RESULTS\n")
   cat(rep("=", 50), "\n")
   
   # Overall statistics
   total_tests <- nrow(x)
   successful_tests <- sum(x$success)
   
-  cat(sprintf("📊 Total Tests: %d\n", total_tests))
-  cat(sprintf("✅ Successful: %d (%.1f%%)\n", successful_tests, (successful_tests/total_tests)*100))
+  cat(sprintf("Total Tests: %d\n", total_tests))
+  cat(sprintf("Successful: %d (%.1f%%)\n", successful_tests, (successful_tests/total_tests)*100))
   
   if (successful_tests < total_tests) {
     failed_tests <- total_tests - successful_tests
-    cat(sprintf("❌ Failed: %d (%.1f%%)\n", failed_tests, (failed_tests/total_tests)*100))
+    cat(sprintf("Failed: %d (%.1f%%)\n", failed_tests, (failed_tests/total_tests)*100))
   }
   
   # Performance by method
@@ -346,7 +345,7 @@ print.readflex_benchmark <- function(x, ...) {
     method_stats <- aggregate(duration_seconds ~ method, data = successful_data, 
                              FUN = function(x) c(mean = mean(x), median = median(x)))
     
-    cat("\n⏱️  Average Performance by Method:\n")
+    cat("\nAverage Performance by Method:\n")
     for (i in 1:nrow(method_stats)) {
       method <- method_stats$method[i]
       avg_time <- method_stats$duration_seconds[i, "mean"]
@@ -357,7 +356,7 @@ print.readflex_benchmark <- function(x, ...) {
     if ("readflex_enhanced" %in% method_stats$method) {
       baseline <- method_stats[method_stats$method == "readflex_enhanced", "duration_seconds"][,"mean"]
       
-      cat("\n🚀 Relative Performance (vs readflex_enhanced):\n")
+      cat("\nRelative Performance (vs readflex_enhanced):\n")
       for (i in 1:nrow(method_stats)) {
         method <- method_stats$method[i]
         avg_time <- method_stats$duration_seconds[i, "mean"]
@@ -377,7 +376,7 @@ print.readflex_benchmark <- function(x, ...) {
   
   # File-specific performance
   if (length(unique(x$file)) > 1 && nrow(successful_data) > 0) {
-    cat("\n📁 Performance by File:\n")
+    cat("\nPerformance by File:\n")
     file_stats <- aggregate(duration_seconds ~ file, data = successful_data, 
                            FUN = function(x) c(mean = mean(x), count = length(x)))
     
@@ -457,7 +456,7 @@ generate_readflex_report <- function(include_benchmarks = FALSE,
       } else {
         saveRDS(report, save_to_file)
       }
-      cat(sprintf("📄 Report saved to: %s\n", save_to_file))
+      cat(sprintf("Report saved to: %s\n", save_to_file))
     }, error = function(e) {
       warning(sprintf("Failed to save report: %s", e$message))
     })
@@ -472,17 +471,17 @@ generate_readflex_report <- function(include_benchmarks = FALSE,
 #' @param x readflex_report object
 #' @param ... Additional arguments
 print.readflex_report <- function(x, ...) {
-  cat("📋 READFLEX COMPREHENSIVE REPORT\n")
+  cat("READFLEX COMPREHENSIVE REPORT\n")
   cat(rep("=", 60), "\n")
   
   # Metadata
-  cat(sprintf("📅 Generated: %s\n", x$metadata$generated_at))
-  cat(sprintf("💻 System: %s on %s\n", 
+  cat(sprintf("Generated: %s\n", x$metadata$generated_at))
+  cat(sprintf("System: %s on %s\n", 
               x$metadata$system_info$r_version,
               x$metadata$system_info$platform))
   
   # Configuration summary
-  cat("\n⚙️  CONFIGURATION:\n")
+  cat("\nCONFIGURATION:\n")
   cat(sprintf("  Default encodings: %d\n", length(x$configuration$default_encodings)))
   cat(sprintf("  Cache enabled: %s\n", x$configuration$cache_enabled))
   cat(sprintf("  Parallel enabled: %s\n", x$configuration$parallel_enabled))
@@ -490,7 +489,7 @@ print.readflex_report <- function(x, ...) {
   
   # Usage summary
   if (!is.null(x$usage_statistics$summary)) {
-    cat("\n📊 USAGE STATISTICS:\n")
+    cat("\nUSAGE STATISTICS:\n")
     s <- x$usage_statistics$summary
     cat(sprintf("  Operations: %d\n", s$total_operations))
     cat(sprintf("  Data processed: %.2f MB\n", s$total_data_processed_mb))
@@ -498,16 +497,16 @@ print.readflex_report <- function(x, ...) {
   }
   
   # Cache status
-  cat("\n💾 CACHE STATUS:\n")
+  cat("\nCACHE STATUS:\n")
   cat(sprintf("  Cached encodings: %d\n", x$cache_status$cache_entries))
   cat(sprintf("  Performance stats: %d\n", x$cache_status$stats_entries))
   
   # Benchmarks
   if (!is.null(x$benchmarks) && !is.null(x$benchmarks$error)) {
-    cat("\n🏁 BENCHMARKS: Error occurred\n")
+    cat("\nBENCHMARKS: Error occurred\n")
     cat(sprintf("  %s\n", x$benchmarks$error))
   } else if (!is.null(x$benchmarks)) {
-    cat("\n🏁 BENCHMARKS: Available\n")
+    cat("\nBENCHMARKS: Available\n")
     cat(sprintf("  Total tests: %d\n", nrow(x$benchmarks)))
     cat(sprintf("  Success rate: %.1f%%\n", 
                 sum(x$benchmarks$success) / nrow(x$benchmarks) * 100))

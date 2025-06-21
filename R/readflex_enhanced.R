@@ -318,35 +318,35 @@ get_readflex_info <- function(data) {
 #' @param x readflex_info object
 #' @param ... Additional arguments
 print.readflex_info <- function(x, ...) {
-  cat("📊 READFLEX PROCESSING INFORMATION\n")
+  cat("READFLEX PROCESSING INFORMATION\n")
   cat(rep("=", 45), "\n")
   
-  cat(sprintf("🔤 Encoding used: %s\n", x$encoding))
+  cat(sprintf("Encoding used: %s\n", x$encoding))
   
   if (!is.null(x$processing_info)) {
     info <- x$processing_info
-    cat(sprintf("📏 File size: %.2f MB\n", info$file_size_mb))
-    cat(sprintf("⏱️  Processing time: %.3f seconds\n", info$processing_time_seconds))
-    cat(sprintf("💾 Cache used: %s\n", if (info$cache_used) "Yes" else "No"))
-    cat(sprintf("🔄 Parallel processing: %s\n", if (info$parallel_used) "Yes" else "No"))
-    cat(sprintf("🧪 Encodings tested: %d\n", info$total_encodings_tested))
+    cat(sprintf("File size: %.2f MB\n", info$file_size_mb))
+    cat(sprintf("  Processing time: %.3f seconds\n", info$processing_time_seconds))
+    cat(sprintf(" Cache used: %s\n", if (info$cache_used) "Yes" else "No"))
+    cat(sprintf(" Parallel processing: %s\n", if (info$parallel_used) "Yes" else "No"))
+    cat(sprintf(" Encodings tested: %d\n", info$total_encodings_tested))
     
     if (!is.null(info$profile_used)) {
-      cat(sprintf("🌍 Profile used: %s\n", info$profile_used))
+      cat(sprintf(" Profile used: %s\n", info$profile_used))
     }
   }
   
   if (!is.null(x$validation)) {
     val <- x$validation
-    cat(sprintf("✅ Data validation: %s\n", if (val$valid) "PASSED" else "FAILED"))
-    cat(sprintf("📈 Quality score: %.1f%%\n", val$summary$quality_score * 100))
+    cat(sprintf(" Data validation: %s\n", if (val$valid) "PASSED" else "FAILED"))
+    cat(sprintf(" Quality score: %.1f%%\n", val$summary$quality_score * 100))
     
     if (val$summary$error_count > 0) {
-      cat(sprintf("❌ Errors: %d\n", val$summary$error_count))
+      cat(sprintf(" Errors: %d\n", val$summary$error_count))
     }
     
     if (val$summary$warning_count > 0) {
-      cat(sprintf("⚠️  Warnings: %d\n", val$summary$warning_count))
+      cat(sprintf("  Warnings: %d\n", val$summary$warning_count))
     }
   }
   

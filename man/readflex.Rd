@@ -41,6 +41,7 @@ a user-specified list of common encodings if detection fails.
 }
 \examples{
 # Basic usage (auto-detect encoding)
+\dontrun{
 df <- readflex("data.csv")
 
 # Specify additional read.csv options and enable verbose output
@@ -48,5 +49,5 @@ df <- readflex("data.csv", sep = ";", stringsAsFactors = FALSE, verbose = TRUE)
 
 # For Shiny apps, set a custom file size limit
 df <- readflex("data.csv", max_file_size_mb = 50)
-
+}
 }
