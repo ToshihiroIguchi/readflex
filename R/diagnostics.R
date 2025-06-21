@@ -4,6 +4,25 @@
 #' Comprehensive error handling, diagnostics, and user feedback features
 #' to help troubleshoot file reading issues.
 
+#' Simple ASCII progress bar formatting function
+#' 
+#' @param current Integer current progress value
+#' @param total Integer total progress value
+#' @param width Integer width of progress bar (default 40)
+#' @return Character string formatted progress bar
+format_progress_bar <- function(current, total, width = 40) {
+  percent <- current / total
+  filled <- round(percent * width)
+  bar <- paste0(
+    "[", 
+    paste(rep("=", filled), collapse = ""),
+    paste(rep(" ", width - filled), collapse = ""),
+    "] ",
+    sprintf("%3.0f%% (%d/%d)", percent * 100, current, total)
+  )
+  return(bar)
+}
+
 if (!requireNamespace("progress", quietly = TRUE)) {
   # Simple ASCII progress bar fallback for CRAN compliance
   simple_progress_bar <- function(total) {
@@ -34,6 +53,7 @@ if (!requireNamespace("progress", quietly = TRUE)) {
 #' @param file Character path to file
 #' @param sample_lines Integer number of lines to sample
 #' @return List with diagnostic information
+#' @export
 readflex_diagnostic <- function(file, sample_lines = 100) {
   if (!file.exists(file)) {
     stop(sprintf(MESSAGES$file_not_found, file))
@@ -409,6 +429,7 @@ print.readflex_diagnostic <- function(x, verbose = TRUE, ...) {
 #' @param file Character path to file
 #' @param ... Additional arguments passed to readflex
 #' @return Data frame or error with suggestions
+#' @export
 readflex_auto_fix <- function(file, ...) {
   # First, run diagnostics
   diag <- readflex_diagnostic(file)

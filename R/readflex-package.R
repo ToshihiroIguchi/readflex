@@ -45,20 +45,20 @@
 #' @examples
 #' \dontrun{
 #' # Basic usage with automatic encoding detection
-#' df <- readflex("data.csv")
+#' df <- readflex("your_data.csv")
 #'
 #' # With verbose output to see detection process
-#' df <- readflex("data.csv", verbose = TRUE)
+#' df <- readflex("your_data.csv", verbose = TRUE)
 #'
 #' # Specify custom encodings to try
-#' df <- readflex("data.csv", encodings = c("UTF-8", "Shift_JIS", "GB18030"))
+#' df <- readflex("your_data.csv", encodings = c("UTF-8", "Shift_JIS", "GB18030"))
 #'
 #' # Use regional profile for optimized detection
 #' readflex_profile("japan", apply_immediately = TRUE)
-#' df <- readflex("japanese_data.csv")
+#' df <- readflex("your_japanese_data.csv")
 #'
 #' # Run diagnostics on problematic files
-#' diag <- readflex_diagnostic("problematic_file.csv")
+#' diag <- readflex_diagnostic("your_problematic_file.csv")
 #' print(diag)
 #' }
 #'
@@ -67,8 +67,8 @@
 #' @seealso
 #' Useful links:
 #' \itemize{
-#'   \item \url{https://github.com/toshihiro-iguchi/readflex}
-#'   \item Report bugs at \url{https://github.com/toshihiro-iguchi/readflex/issues}
+#'   \item \url{https://github.com/ToshihiroIguchi/readflex}
+#'   \item Report bugs at \url{https://github.com/ToshihiroIguchi/readflex/issues}
 #' }
 #'
 "_PACKAGE"

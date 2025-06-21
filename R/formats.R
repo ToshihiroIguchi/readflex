@@ -10,6 +10,7 @@
 #' @param format Character format override ("auto", "csv", "tsv", "psv", "excel", "ods")
 #' @param ... Additional arguments passed to appropriate reader
 #' @return Data frame
+#' @export
 readflex_multi <- function(file, format = "auto", ...) {
   if (!file.exists(file)) {
     stop(sprintf("[readflex] File not found: %s", file))
@@ -401,6 +402,7 @@ read_fixed_width_base <- function(file, widths, col_names = NULL, ...) {
 #' @param progress Logical whether to show progress bar
 #' @param ... Additional arguments passed to readflex_multi
 #' @return List of data frames or combined data frame
+#' @export
 readflex_batch <- function(file_pattern, output_format = "list", progress = TRUE, ...) {
   files <- Sys.glob(file_pattern)
   

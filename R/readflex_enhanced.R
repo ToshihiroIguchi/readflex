@@ -1,9 +1,3 @@
-#' Enhanced readflex function with additional features
-#' 
-#' @description
-#' Main readflex function with integrated performance optimizations,
-#' diagnostics, and configuration features for robust file reading.
-
 # Source all required modules
 if (file.exists("R/performance.R")) source("R/performance.R")
 if (file.exists("R/diagnostics.R")) source("R/diagnostics.R")  
@@ -33,16 +27,16 @@ if (file.exists("R/config.R")) source("R/config.R")
 #' @examples
 #' \dontrun{
 #' # Basic usage with auto-detection
-#' df <- readflex_enhanced("data.csv")
+#' df <- readflex_enhanced("your_data.csv")
 #' 
 #' # With regional profile
-#' df <- readflex_enhanced("japanese_data.csv", profile = "japan")
+#' df <- readflex_enhanced("your_japanese_data.csv", profile = "japan")
 #' 
 #' # With verbose output and validation
-#' df <- readflex_enhanced("data.csv", verbose = TRUE, validate_data = TRUE)
+#' df <- readflex_enhanced("your_data.csv", verbose = TRUE, validate_data = TRUE)
 #' 
 #' # With auto-fix for problematic files
-#' df <- readflex_enhanced("problematic.csv", auto_fix = TRUE)
+#' df <- readflex_enhanced("your_problematic_file.csv", auto_fix = TRUE)
 #' }
 #' 
 #' @export

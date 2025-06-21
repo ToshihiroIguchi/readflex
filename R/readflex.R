@@ -14,15 +14,16 @@
 #' @param max_file_size_mb Numeric. Maximum file size in MB to prevent memory issues in Shiny apps. Default 100.
 #' @return A `data.frame` containing the imported CSV data.
 #' @examples
+#' \dontrun{
 #' # Basic usage (auto-detect encoding)
-#' df <- readflex("data.csv")
+#' df <- readflex("your_data.csv")
 #'
 #' # Specify additional read.csv options and enable verbose output
-#' df <- readflex("data.csv", sep = ";", stringsAsFactors = FALSE, verbose = TRUE)
+#' df <- readflex("your_data.csv", sep = ";", stringsAsFactors = FALSE, verbose = TRUE)
 #'
 #' # For Shiny apps, set a custom file size limit
-#' df <- readflex("data.csv", max_file_size_mb = 50)
-#'
+#' df <- readflex("your_data.csv", max_file_size_mb = 50)
+#' }
 #' @import utils
 #' @importFrom readr guess_encoding read_lines
 #' @importFrom stringi stri_enc_detect

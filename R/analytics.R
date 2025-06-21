@@ -8,6 +8,7 @@
 #' 
 #' @param detailed Logical whether to include detailed breakdowns
 #' @return List with usage statistics
+#' @export
 readflex_stats <- function(detailed = TRUE) {
   if (length(.performance_stats) == 0) {
     return(structure(list(
@@ -167,6 +168,7 @@ print.readflex_stats <- function(x, ...) {
 #' @param compare_with Character vector of alternative functions to compare
 #' @param verbose Logical whether to show progress
 #' @return Data frame with benchmark results
+#' @export
 benchmark_readflex <- function(test_files, iterations = 3, compare_with = NULL, verbose = TRUE) {
   if (length(test_files) == 0) {
     stop("No test files provided")

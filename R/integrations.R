@@ -9,6 +9,7 @@
 #' @param id Character module ID
 #' @param max_file_size Numeric maximum file size in MB
 #' @return Shiny UI
+#' @export
 readflex_shiny_ui <- function(id, max_file_size = 100) {
   ns <- shiny::NS(id)
   
@@ -78,6 +79,7 @@ readflex_shiny_ui <- function(id, max_file_size = 100) {
 #' @param id Character module ID
 #' @param max_file_size Numeric maximum file size in MB
 #' @return Reactive data frame
+#' @export
 readflex_shiny_server <- function(id, max_file_size = 100) {
   shiny::moduleServer(id, function(input, output, session) {
     
@@ -206,6 +208,7 @@ readflex_shiny_server <- function(id, max_file_size = 100) {
 #' @param schema List with validation rules
 #' @param strict Logical whether to use strict validation
 #' @return List with validation results
+#' @export
 validate_readflex_data <- function(data, schema = NULL, strict = FALSE) {
   
   if (is.null(schema)) {
@@ -439,6 +442,7 @@ print.readflex_validation <- function(x, ...) {
 #' @param title Character app title
 #' @param theme Character Bootstrap theme
 #' @return Shiny app object
+#' @export
 create_readflex_app <- function(title = "Readflex File Processor", theme = "flatly") {
   
   ui <- shiny::fluidPage(

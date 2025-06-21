@@ -37,6 +37,7 @@
 #' @param guess_n_max Integer default number of lines for encoding detection
 #' @param save_config Logical whether to save configuration to file
 #' @return Invisible list of current configuration
+#' @export
 readflex_config <- function(
   default_encodings = NULL,
   cache_enabled = NULL,
@@ -127,6 +128,7 @@ reset_readflex_config <- function() {
 #' @param region Character region identifier or "auto" for system detection
 #' @param apply_immediately Logical whether to apply profile to global config
 #' @return List with regional configuration
+#' @export
 readflex_profile <- function(region = "auto", apply_immediately = FALSE) {
   
   if (region == "auto") {

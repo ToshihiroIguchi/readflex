@@ -3,14 +3,22 @@ Type: Package
 Title: Flexible CSV Reader with Automatic Encoding Detection
 Version: 1.0.0
 Date: 2025-06-21
-Author: Toshihiro Iguchi <toshihiro.iguchi.github@gmail.com>
+Author: Toshihiro Iguchi [aut, cre]
 Maintainer: Toshihiro Iguchi <toshihiro.iguchi.github@gmail.com>
+Authors@R: 
+    c(
+      person(given = "Toshihiro", family = "Iguchi",
+             role = c("aut", "cre"),
+             email = "toshihiro.iguchi.github@gmail.com")
+    )
 Description: Automatically detects character encodings and reads CSV files 
     with various text encodings commonly used worldwide. Supports UTF-8, 
     Shift_JIS, GB18030, Big5, EUC-KR, KOI8-R, Windows-1251, ISO-8859-1 
     and other encodings. Provides diagnostic tools, caching for performance,
     and handles multiple file formats including compressed files.
 License: MIT + file LICENSE
+URL: https://github.com/ToshihiroIguchi/readflex
+BugReports: https://github.com/ToshihiroIguchi/readflex/issues
 Encoding: UTF-8
 LazyData: true
 Depends: 
@@ -18,11 +26,11 @@ Depends:
 Imports:
     utils,
     tools,
-    stats
+    stats,
+    readr,
+    stringi
 Suggests:
-    stringi (>= 1.4.0),
     stringr,
-    readr (>= 2.0.0),
     parallel,
     digest,
     jsonlite,
