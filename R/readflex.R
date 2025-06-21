@@ -10,6 +10,8 @@
 #' @param encodings Character vector. Common encodings to try if auto-detection fails.
 #' @param guess_n_max Integer. Number of lines to sample when guessing encoding. Default is 1000.
 #' @param verbose Logical. If TRUE, prints messages about detection and trial attempts. Default FALSE.
+#' @param stringsAsFactors Logical. Should character vectors be converted to factors? Default FALSE.
+#' @param max_file_size_mb Numeric. Maximum file size in MB to prevent memory issues in Shiny apps. Default 100.
 #' @return A `data.frame` containing the imported CSV data.
 #' @examples
 #' # Basic usage (auto-detect encoding)
@@ -17,6 +19,9 @@
 #'
 #' # Specify additional read.csv options and enable verbose output
 #' df <- readflex("data.csv", sep = ";", stringsAsFactors = FALSE, verbose = TRUE)
+#'
+#' # For Shiny apps, set a custom file size limit
+#' df <- readflex("data.csv", max_file_size_mb = 50)
 #'
 #' @import utils
 #' @importFrom readr guess_encoding read_lines
@@ -33,10 +38,34 @@ readflex <- function(file,
                      ),
                      guess_n_max = 1000,
                      verbose = FALSE,
-                     stringsAsFactors = FALSE) { # 引数追加
+                     stringsAsFactors = FALSE,
+                     max_file_size_mb = 100) { # Added parameter for factor conversion control
   stopifnot(is.character(file), length(file) == 1)
   stopifnot(is.numeric(guess_n_max), guess_n_max > 0)
   stopifnot(is.logical(verbose), length(verbose) == 1)
+  stopifnot(is.character(encodings), length(encodings) > 0)
+  stopifnot(is.logical(stringsAsFactors), length(stringsAsFactors) == 1)
+  stopifnot(is.numeric(max_file_size_mb), max_file_size_mb > 0)
+  
+  # Check file existence
+  if (!file.exists(file)) {
+    stop(sprintf("[readflex] File not found: %s", file))
+  }
+  
+  # Check for empty file
+  if (file.size(file) == 0) {
+    warning(sprintf("[readflex] File is empty: %s", file))
+    return(data.frame())
+  }
+  
+  # Check file size limit (important for Shiny apps)
+  file_size_mb <- file.size(file) / (1024 * 1024)
+  if (file_size_mb > max_file_size_mb) {
+    stop(sprintf(
+      "[readflex] File size (%.1f MB) exceeds limit (%.1f MB). Consider using a smaller file or increasing max_file_size_mb parameter.",
+      file_size_mb, max_file_size_mb
+    ))
+  }
 
   # Helper: try reading with a given encoding
   try_read <- function(enc) {
@@ -46,7 +75,7 @@ readflex <- function(file,
         file,
         fileEncoding = enc,
         ...,
-        stringsAsFactors = stringsAsFactors # ここで反映
+        stringsAsFactors = stringsAsFactors # Apply stringsAsFactors setting
       ),
       error   = function(e) e,
       warning = function(w) w
@@ -82,7 +111,7 @@ readflex <- function(file,
     res <- try_read(enc)
     if (inherits(res, "data.frame")) {
       if (verbose) message(sprintf("[readflex] Success with: %s", enc))
-      else message(sprintf("[readflex] Read OK (encoding: %s)", enc))
+      else if (verbose) message(sprintf("[readflex] Read OK (encoding: %s)", enc))
       return(res)
     }
   }

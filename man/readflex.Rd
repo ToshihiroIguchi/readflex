@@ -11,7 +11,9 @@ readflex(
     "EUC-JP", "ISO-2022-JP", "ISO-8859-1", "Windows-1252", "latin1", "GB18030", "GB2312",
     "GBK", "Big5", "Big5-HKSCS", "EUC-KR", "ISO-2022-KR"),
   guess_n_max = 1000,
-  verbose = FALSE
+  verbose = FALSE,
+  stringsAsFactors = FALSE,
+  max_file_size_mb = 100
 )
 }
 \arguments{
@@ -24,6 +26,10 @@ readflex(
 \item{guess_n_max}{Integer. Number of lines to sample when guessing encoding. Default is 1000.}
 
 \item{verbose}{Logical. If TRUE, prints messages about detection and trial attempts. Default FALSE.}
+
+\item{stringsAsFactors}{Logical. Should character vectors be converted to factors? Default FALSE.}
+
+\item{max_file_size_mb}{Numeric. Maximum file size in MB to prevent memory issues in Shiny apps. Default 100.}
 }
 \value{
 A `data.frame` containing the imported CSV data.
@@ -39,5 +45,8 @@ df <- readflex("data.csv")
 
 # Specify additional read.csv options and enable verbose output
 df <- readflex("data.csv", sep = ";", stringsAsFactors = FALSE, verbose = TRUE)
+
+# For Shiny apps, set a custom file size limit
+df <- readflex("data.csv", max_file_size_mb = 50)
 
 }

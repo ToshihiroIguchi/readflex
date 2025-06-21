@@ -1,7 +1,8 @@
 Package: readflex
 Type: Package
-Title: Flexible CSV reader with auto-detected encoding
-Version: 0.1.0
+Title: Enhanced Flexible CSV Reader with Automatic Encoding Detection
+Version: 1.0.0
+Date: 2025-06-21
 Authors@R: c(
     person(
       "Toshihiro", "Iguchi",
@@ -9,14 +10,47 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: `readflex()` attempts to read a CSV file by automatically detecting its character encoding
-    (using `readr::guess_encoding()` or `stringi::stri_enc_detect()`) and falls back to
-    a user-specified list of common encodings if detection fails.
+Maintainer: Toshihiro Iguchi <toshihiro.iguchi.github@gmail.com>
+Description: An advanced CSV reader that automatically detects character encodings
+    and handles various file formats. Features include multi-language support,
+    performance optimization with caching and parallel processing, comprehensive
+    diagnostics, data validation, Shiny integration, and extensive analytics.
+    Supports UTF-8, Shift_JIS, GB18030, Big5, EUC-KR, KOI8-R, Windows-1251,
+    ISO-8859-1, and many other encodings commonly used worldwide.
 License: MIT + file LICENSE
+URL: https://github.com/toshihiro-iguchi/readflex
+BugReports: https://github.com/toshihiro-iguchi/readflex/issues
 Encoding: UTF-8
 LazyData: true
+Depends: 
+    R (>= 3.6.0)
 Imports:
-  readr,
-  stringi,
-  utils
+    utils,
+    tools,
+    stats
+Suggests:
+    stringi (>= 1.4.0),
+    readr (>= 2.0.0),
+    parallel,
+    digest,
+    jsonlite,
+    progress,
+    shiny,
+    shinythemes,
+    DT,
+    readxl,
+    readODS,
+    R.utils,
+    data.table,
+    testthat (>= 3.0.0),
+    tinytest
 RoxygenNote: 7.3.2
+Collate:
+    'performance.R'
+    'diagnostics.R'
+    'config.R'
+    'formats.R'
+    'integrations.R'
+    'analytics.R'
+    'readflex_enhanced.R'
+    'readflex.R'

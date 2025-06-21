@@ -1,1 +1,4 @@
-exportPattern("^[[:alpha:]]+")
+export(readflex)
+importFrom(readr, guess_encoding, read_lines)
+importFrom(stringi, stri_enc_detect)
+import(utils)
